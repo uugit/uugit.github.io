@@ -26,7 +26,7 @@ tags:
 
  * 那这个步骤具体都干了什么事
    * 那简单来说,就是把一些数据重新刷到zk
-    ![Image](/img/updateZK.jpg)
+    ![Image](/img/updateZk.png)
 
 
  * 在热更新的时候, 通过global 的system.log 日志观察到
@@ -59,7 +59,7 @@ tags:
      * SofaTracerModule 类实现了Module 接口，并增加 @Extension(“sofaTracer”) 注解，方便SOFARPC在启动时将相关模块加载进来。
         SofaTracerModule 作为SOFA-PRC 链路追踪的入口，在SofaTracerModule模块被加载时完成一些事件的订阅。
 
-     > SofaTracerSubscriber是它的事件订阅者, 这里会订阅 9 种事件， 通过监听SOFARPC的这 9 种事件，
+     * SofaTracerSubscriber是它的事件订阅者, 这里会`订阅 9 种事件`， 通过监听SOFARPC的这 9 种事件，
        来完成埋点数据的获取和异步磁盘写入操作。SOFARPC通过事件总线(EventBus)设计来订阅这些事件，当这些事件发生时会创建事件传入到EventBus。
         EventBus中一旦发布新的事件就会通知所有的订阅者，SAFA-Tracer 统一采用 SofaTracerSubscriber 订阅和处理这9种事件，
          最终链路追踪数据的获取操作都交给了RpcSofaTracer处理。
