@@ -22,11 +22,11 @@ tags:
 
 ### 排查:
  * 经过各种测试, 发现只要在走天梯流程时, 有一个流程是`更新filecache, 只要跳过此步骤, 就没问题`
- ![Image](/img/filecache.jpg)
+ ![Image](/img/filecache.png)
 
  * 那这个步骤具体都干了什么事
    * 那简单来说,就是把一些数据重新刷到zk
-    ![Image](/img/updateZk.jpg)
+    ![Image](/img/updateZK.jpg)
 
 
  * 在热更新的时候, 通过global 的system.log 日志观察到
@@ -55,7 +55,7 @@ tags:
 
    * 查看了源代码:
      * sofaRpc 本身有很很多模块扩展, RPC上下文会自动加载, 比如:模块有 tracer, metric 都属于此类扩展
-     ![Image](/img/sofaTracer3.jpg)
+     ![Image](/img/sofaTracer3.png)
      * SofaTracerModule 类实现了Module 接口，并增加 @Extension(“sofaTracer”) 注解，方便SOFARPC在启动时将相关模块加载进来。
         SofaTracerModule 作为SOFA-PRC 链路追踪的入口，在SofaTracerModule模块被加载时完成一些事件的订阅。
 
@@ -64,10 +64,10 @@ tags:
         EventBus中一旦发布新的事件就会通知所有的订阅者，SAFA-Tracer 统一采用 SofaTracerSubscriber 订阅和处理这9种事件，
          最终链路追踪数据的获取操作都交给了RpcSofaTracer处理。
    * 如图:
-   ![Image](/img/sofaTracer4.jpg)
+   ![Image](/img/sofaTracer4.png)
 
    * 那这些事件何时被注册的呢?
-   ![Image](/img/sofaTracer5.jpg)
+   ![Image](/img/sofaTracer5.png)
 
    * 通过上面的继承关系图可以看到，ConsumerConfig是AbstractIdConfig的子类，所以在初始化ConsumerConfig的时候AbstractIdConfig静态代码块也会被初始化。
 
