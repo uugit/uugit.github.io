@@ -81,11 +81,12 @@ tags:
       }
 
      ```
-   * 在调用RpcRuntimeContext#now方法的时候，会调用到RpcRuntimeContext的静态代码块
+   * 在调用`RpcRuntimeContext#now方法`的时候，会调用到RpcRuntimeContext的静态代码块
    ![Image](/img/moduleInstall.jpg)
+   * 各个模块会被装载
    ![Image](/img/moduleInstall1.jpg)
    * 9种事件在这里注册的, 有install 也是有uninstall
-   ![Image](/img/moduleUnInstall.jpg)
+   ![Image](/img/moduleUninstall.jpg)
    * `而通过debug发现, 在热更的时候会调detroy方法, 那显然是所有的module被uninstall了, 并不是因为provider export多次的问题`
    ![Image](/img/destroy.jpg)
    * 在我们的rest-api中, `RPCCenter类 重写了destroy()`
@@ -100,7 +101,7 @@ tags:
      ```
    ![Image](/img/destroy1.jpg)
 
-   * 问题到这里已经找到了, 就是因为卸载了sofa各个模块, 所以再次调用sofa的时候, SofaTracer就报错了
+   * `问题到这里已经找到了, 就是因为卸载了sofa各个模块, 所以再次调用sofa的时候, SofaTracer就报错了`
    * 应该不止sofaTracer, 涉及到destroy方法里的相关内容, 再次调用都会报错~~
 
 
