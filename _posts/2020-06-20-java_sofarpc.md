@@ -4,7 +4,7 @@ title:      项目中的sofaRpc报错
 subtitle:
 date:       2020-06-20
 author:
-header-img: img/post-bg-coffee.jpg
+header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
     - sofaRpc
@@ -31,7 +31,7 @@ tags:
 
  * 在热更新的时候, 通过global 的system.log 日志观察到
    * 会多次调RPCCenter里面的afterPropertiesSet()方法
-   ![Image](/img/updateZk.jpg)
+   ![Image](/img/error1.jpg)
    * 这个方法会多次将sofaRpc的 Provider export(), 初步怀疑是多次export的问题~
      * `改了一波代码, 让afterPropertiesSet() 只被调用一次, 又重试了一下, OK了`
      * ` 那究竟是不是多次export问题? 看下sofa源码`
@@ -43,6 +43,7 @@ tags:
    ![Image](/img/sofaTracer2.jpg)
 
    * 通过debug发现 客户端引用的时候会看到如下这段代码：
+
    ```java
 
      // 产生开始调用事件
@@ -86,7 +87,7 @@ tags:
    * 9种事件在这里注册的, 有install 也是有uninstall
    ![Image](/img/moduleUnInstall.jpg)
    * `而通过debug发现, 在热更的时候会调detroy方法, 那显然是所有的module被uninstall了, 并不是因为provider export多次的问题`
-   ![Image](/img/destory.jpg)
+   ![Image](/img/destroy.jpg)
    * 在我们的rest-api中, `RPCCenter类 重写了destroy()`
 
      ```java
@@ -97,7 +98,7 @@ tags:
            }
 
      ```
-   ![Image](/img/destory1.jpg)
+   ![Image](/img/destroy1.jpg)
 
    * 问题到这里已经找到了, 就是因为卸载了sofa各个模块, 所以再次调用sofa的时候, SofaTracer就报错了
    * 应该不止sofaTracer, 涉及到destroy方法里的相关内容, 再次调用都会报错~~
@@ -105,5 +106,5 @@ tags:
 
 ### 结论
   * 不是provider 多次export 导致的, 是因为调了desotry(), 被uninstall了
-  * [文档1](https://www.sofastack.tech/blog/sofa-rpc-link-tracking/)
-  * [文档2](https://www.cnblogs.com/luozhiyun/p/11324181.html)
+  * [参考文档](https://www.sofastack.tech/blog/sofa-rpc-link-tracking/)
+  * [参考文档](https://www.cnblogs.com/luozhiyun/p/11324181.html)
