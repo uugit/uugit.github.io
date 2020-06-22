@@ -89,7 +89,7 @@ tags:
    ![Image](/img/moduleUninstall.jpg)
    * `而通过debug发现, 在热更的时候会调detroy方法, 那显然是所有的module被uninstall了, 并不是因为provider export多次的问题`
    ![Image](/img/destroy.jpg)
-   * 在我们的rest-api中, `RPCCenter类 重写了destroy()`
+   * 在我们的rest-api中, `RPCCenter类 重写了destroy(), 调用顺序: 先调destroy() -> afterPropertiesSet()`
 
      ```java
 
