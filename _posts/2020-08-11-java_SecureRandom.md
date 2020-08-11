@@ -105,11 +105,12 @@ tags:
 
    * 增加jvm配置参数：
 
-    ```java
+   ```java
 
-      -Djava.security.egd=file:/dev/./urandom
+     -Djava.security.egd=file:/dev/./urandom
 
-    ```
+   ```
+
    * Default algorithm: DRBG
    * Provider: SecureRandom.DRBG algorithm from: SUN
 
