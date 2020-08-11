@@ -75,7 +75,12 @@ tags:
 
    * 意思就是说: `如果熵源是/dev/random, {@code generateSeed}, {@code reseed} and {@code nextBytes} 这三个方法会出现阻塞`
 
-   * 然而: 对于底层选择entropy source的逻辑如下：所以我们的环境下默认的entropy source是/dev/random
+   * 对于底层选择entropy source的逻辑如下：
+
+    ![Image](/img/d50.png)
+
+
+   * 通过在起服脚本中, 添加打印: 所以我们的环境下默认的entropy source是: /dev/random
 
     ```java
 
@@ -88,21 +93,36 @@ tags:
 
     ```
 
-    ![Image](/img/C80.png)
+   * 起服log :
 
+     ![Image](/img/C80.png)
+
+   * 大致了解是怎么回事了
+
+     ![Image](/img/584.png)
 
 ### 解决方式:
+
    * 增加jvm配置参数：
 
     ```java
+
       -Djava.security.egd=file:/dev/./urandom
+
     ```
    * Default algorithm: DRBG
    * Provider: SecureRandom.DRBG algorithm from: SUN
 
-   ![Image](/img/584.png)
+   * 简单概括就是：
+
+      * java生成随机码时，会使用两个文件：
+      * /dev/random ， 随机性高，和真实的物理环境有关，阻塞模式。（本文出现的启动缓慢问题，就出在这个上面）
+      * /dev/urandom ，伪随机模式，非阻塞，随机性不如 random。
+
+   * 具体详情参考下面文档
 
 ### 参考
+
   * [参考文档](https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for)
   * [参考文档](https://www.52jingya.com/aid4198.html)
   * [参考文档](https://hongjiang.info/jvm-random-and-entropy-source/)
