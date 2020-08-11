@@ -38,10 +38,13 @@ tags:
    * `那么在client->server的init消息都做了什么呢？`
      其实就是一个握手过程,在我们的网络层中叫做CONNECT过程：`其实主要做了加解密秘钥相关的工作`
 
-     流程如下：
-     client --> server : send init msg
-     server: receive init msg
-     server --> client : send handshake msg
+   * 流程如下：
+
+    sequenceDiagram
+        client ->> server: send init msg
+        server-->>client: receive init msg
+        server--x client: send handshake msg
+
 
      ![Image](/img/f3.png)
 
